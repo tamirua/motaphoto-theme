@@ -1,7 +1,7 @@
 /*
 Theme Name: Motaphoto Theme
 Theme URI: http://motaphoto.com/motaphoto-theme
-Author: Your Name
+Author: Tamirua
 Author URI: http://motaphoto.com
 Description: A custom theme for Motaphoto
 Version: 1.0
@@ -11,3 +11,514 @@ Tags: custom
 Text Domain: motaphoto-theme
 */
 
+/* Space Mono font for header and footer */
+@font-face {
+    font-family: 'Space Mono';
+    src: url('../fonts/SpaceMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Space Mono';
+    src: url('../fonts/SpaceMono-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Poppins font for main content */
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/fonts/Poppins-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SpaceMono';
+    src: url('assets/fonts/SpaceMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Apply Space Mono to Header and Footer */
+header, .site-footer {
+    font-family: 'SpaceMono', monospace;
+}
+
+/* Apply Poppins to the Rest of the Site */
+body {
+    max-width: 1440px;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #FFFFFF;
+    padding: 1rem;
+}
+
+.navbar .container {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin: 0 auto;
+}
+
+.logo img {
+width: 216px;
+height: 14px;
+top: 31px;
+left: 146px;
+gap: 0px;
+opacity: 0px;
+ 
+}
+
+.main-menu .nav-links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 2rem;
+}
+
+.main-menu .nav-links a {
+    color: #000;
+    text-decoration: none;
+    font-size: 1.25rem;
+}
+
+/*contact form*/
+.contact-modal{
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 769px;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 100px;
+    /*z-index: 9999;*/
+    }
+    .modal-salon{
+        background:white;
+        max-width:680px;
+        padding:30px;
+        position:relative;
+        border:4px solid black;
+    }
+    
+    
+    .contact-modal.is-visible {
+        display: flex; 
+    }
+    
+    /* Close button styles */
+.close-modal {
+    position:absolute;
+    top:-5px;
+    right:-5px;
+    border-radius:20px;
+    height:20px;
+    width:20px;
+    border:1px solid black;
+    background:white;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:all 0.4s ease;
+}
+
+.close-modal:hover {
+    background-color: #D8D8D8; 
+    color: #fff;
+}
+
+    .modal-header h1{
+        margin:-25px;
+        font-size: 50px;
+    }
+    
+    .wpcf7{
+        margin-top:20px;
+    }
+    .wpcf7-form.init{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    }
+    .wpcf7-text{
+    height: 40px;
+    border: 2px solid #B8BBC2;
+    border-radius: 10px;
+    }
+    
+    .wpcf7-textarea{border: 2px solid #B8BBC2;
+    border-radius: 10px;
+    }
+    
+    .wpcf7-submit{
+        width: 300px;
+        height: 50px;
+        background-color: #D8D8D8;
+        padding-left: 0px;
+        border: none;
+        margin-left: 60px;
+    }
+
+/* Footer Styles */
+.site-footer {
+    background-color: #FFFFFF;
+    padding: 20px 0; 
+    text-align: center; 
+    border-top: 2px solid black; 
+}
+
+.site-footer .container {
+    max-width: 100%; 
+    display: flex;
+    justify-content: center;
+    margin: 0 auto; 
+    padding: 0 20px; 
+}
+
+.footer-navigation {
+    margin-bottom: 10px; 
+}
+
+.footer-menu {
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+    display: flex; 
+    justify-content: center; 
+}
+
+.footer-menu li {
+    margin: 0 30px; 
+}
+
+.footer-menu li a {
+    text-decoration: none; 
+    color:#000000;
+    font-size: 24px; 
+}
+
+.footer-text span {
+    font-size: 24px; 
+}
+
+
+
+
+.contact-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem 0;
+}
+
+
+
+.box-first{
+    display: flex;
+}
+
+.contact-section button {
+    flex: 0;
+    padding: 10px 20px;
+    background-color: #0073aa;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 2rem;
+    font-size: 1rem;
+}
+
+.contact-section button:hover {
+    background-color: #005f8c;
+}
+
+.photo-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.previous-photo, .next-photo {
+    flex: 1;
+    text-align: center;
+}
+
+.modal-container {
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/*******front page*****/
+
+/* General Styling for Centering */
+.site-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#hero {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.hero-content {
+    text-align: center;
+}
+
+.hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+/* Filter Section Styling */
+.filter-section {
+    width:1148px;
+    margin: 20px auto; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    gap: 20px; 
+}
+
+
+
+.filter-left, .filter-right {
+    display: flex; 
+    gap: 20px; 
+}
+
+.select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Making the "year filter" align on the right in the second column */
+.filter-right {
+    max-width: 300px;  
+    display: flex;
+    gap: 10px;
+}
+
+
+/***single-photo****/
+.single-photo-container {
+    max-width: 1148px;
+    margin: 0 auto;
+    padding: 0 15px;
+    box-sizing: border-box;  
+}
+.photo-main {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    gap: 20px; 
+}
+
+.photo-description {
+    max-width: 50%; 
+    align-self: end;
+    box-sizing: border-box;
+}
+
+.photo-description hr{
+    width: 564px;
+height: 0px;
+top: 963px;
+left: 146px;
+gap: 0px;
+border: 1px 0px 0px 0px;
+opacity: 0px;
+border: 1px solid #000000;
+margin-top:20px;
+}
+
+.photo-thumbnail {
+    flex: 1; 
+    max-width: 50%; 
+    display: flex;
+    justify-content: center; 
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.photo-image {
+    max-width: 100%; 
+    height: auto;
+}
+
+.photo-interactions{
+    display: flex;
+    align-items: center;
+    width:100%;
+    justify-content: space-between;
+}
+
+.photo-contact{
+    display: flex;
+    justify-content: space-between;
+    width:50%
+}
+.photo-content p{
+font-family: Poppins;
+font-size: 14px;
+font-weight: 300;
+line-height: 21px;
+text-align: right;
+}
+
+#contact-button{
+width: 272px;
+height: 50px;
+padding: 8px 15px;
+background: #D8D8D8;
+border: none;
+}
+
+hr {
+width: 1148px;
+height: 0px;
+top: 1081px;
+left: 146px;
+border: 1px 0px 0px 0px;
+border: 1px solid #000000;
+margin-top:20px;
+}
+
+
+.related-photos h3{
+font-family: Space Mono;
+font-size: 18px;
+font-weight: 400;
+line-height: 26.66px;
+letter-spacing: 0.1em;
+text-align: left;
+}
+
+.related-photos-container{
+    display: flex;
+    gap: 20px;
+}
+
+/**block-photo**/
+
+.related-photo-image {
+    width: 564px;
+    height: 495px;
+    object-fit: cover;  
+}
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .filters {
+        flex-direction: column;   
+        align-items: flex-start; 
+    }
+
+    .filter-left {
+        flex: none; 
+        width: 100%;  
+    }
+
+    .filter-right {
+        margin-top: 15px;  
+    }
+    #photo-gallery {
+        flex-direction: column; 
+        width:1148px;
+    }
+
+    .photo-item {
+        width: 100%; 
+
+}
+
+#photo-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 20px; 
+    width: 90%; 
+    margin: 0 auto;
+}
+
+.photo-item {
+    width: 564px; 
+    height: 495px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+}
+
+.photo-thumbnail {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+.load-more {
+    display: block;
+    margin: 30px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.load-more:hover {
+    background-color: #444;
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .photo-item {
+        width: 100%; 
+        height: auto; 
+    }
+    .footer-menu {
+        flex-direction: column; 
+
+    .footer-menu li {
+        margin: 10px 0; 
+    }
+}

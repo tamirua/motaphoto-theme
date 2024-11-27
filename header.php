@@ -27,6 +27,13 @@
             ?>
         </nav>
     </div>
+    
 </header>
+
+<!-- Contact Link (will trigger modal) -->
+<!--<a href="#" class="contact-nav-link">Contact</a>-->
+<!--<a href="javascript:void(0);" onclick="openModal()">Contact</a>-->
+
+
 
 <main> <!-- Main content starts here -->
