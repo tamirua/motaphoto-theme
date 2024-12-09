@@ -12,14 +12,36 @@ if (have_posts()) :
         $photo_reference = get_post_meta(get_the_ID(), 'reference', true); // Assuming 'reference' is stored in post meta
         ?>
 
-        <main class="single-photo-container">
+        <main class="single-photo-container" id="single-photo-container">
             <article id="post-<?php the_ID(); ?>" <?php post_class('photo-main'); ?>>
                 <div class="photo-description">
-                    <h2><?php echo esc_html(get_the_title()); ?></h2>
-                    <p><span>Type:</span> <?php echo get_post_meta(get_the_ID(), 'type', true); ?></p>
-                    <p><span>Référence:</span> <?php echo esc_html(get_post_meta(get_the_ID(), 'reference', true)); ?></p>
-                    <p><span>Categories:</span> <?php the_terms(get_the_ID(), 'category', '', ', ', ''); ?></p>
-                    <p><span>Format:</span> <?php echo get_post_meta(get_the_ID(), 'Format', true); ?></p>
+                    <h2><?php
+                        $title = get_the_title();
+                        
+                        // Split title into two parts at the first space
+                        $title_parts = explode(' ', $title, 2);  // Split only into two parts
+                        
+                        // If there are two parts, display them on separate lines
+                        if (count($title_parts) == 2) {
+                            echo esc_html($title_parts[0]) . '<br>' . esc_html($title_parts[1]);
+                        } else {
+                            echo esc_html($title); // For titles that don't have a space, just display the whole title
+                        }
+                        ?></h2>
+                    <p><span>Référence&ensp;:</span> <?php echo esc_html(get_post_meta(get_the_ID(), 'reference', true)); ?></p>
+                    <p><span>Categories&ensp;:</span> <?php the_terms(get_the_ID(), 'category', '', ', ', ''); ?></p>
+                    <p><span>Format&ensp;:</span>
+                    <?php
+                        // Récupère et affiche le format de la photo
+                        $terms = get_the_terms(get_the_ID(), 'photo-format');
+                        if ($terms && !is_wp_error($terms)) {
+                            foreach ($terms as $term) {
+                                echo $term->name . ' ';
+                            }
+                        }
+                        ?>
+                    <p><span>Type&ensp;:</span> <?php echo get_post_meta(get_the_ID(), 'type', true); ?></p>
+                    <p><span>Année&ensp;:</span> <?php echo get_the_date( 'Y' );  ?></p>
                     <hr>
                 </div>
                 <div class="photo-thumbnail">
@@ -39,13 +61,10 @@ if (have_posts()) :
                         Contact
                     </button>
                 </div>
-                <div class="photo-nav">
-                    <div class="photo-nav-prev">
-                        <?php previous_post_link('%link', '&larr; Previous Photo'); ?>
-                    </div>
-                    <div class="photo-nav-next">
-                        <?php next_post_link('%link', 'Next Photo &rarr;'); ?>
-                    </div>
+                <div class="photo-bottom">
+                    
+                
+
                 </div>
             </article>
             <div class="modal-container">

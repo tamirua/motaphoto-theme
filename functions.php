@@ -1,18 +1,25 @@
 <?php
-function motaphoto_enqueue_styles() {
-    wp_enqueue_style('motaphoto-style', get_stylesheet_uri());
+function motaphoto_enqueue_assets() {
+    // Enqueue main stylesheet
+    wp_enqueue_style('motaphoto-style', get_template_directory_uri() . '/style.css');
 
-    wp_enqueue_script('mota-photo-scripts', get_template_directory_uri() . '/js/scripts.js', array('jquery'), null, true);
-     // Enqueue the Load More script
-    wp_enqueue_script('photo-gallery-load-more',get_template_directory_uri() . '/assets/js/gallery-load-more.js', array('jquery'),'1.0',true);
+    // Enqueue general scripts
+    wp_enqueue_script('mota-photo-scripts', get_template_directory_uri() . '/assets/js/scripts.js', array('jquery'), null, true);
 
-    // Pass data to the Load More script
-    wp_localize_script('photo-gallery-load-more','galleryLoadMore',array('ajax_url' => admin_url('admin-ajax.php'), // AJAX URL for WordPress
-    'nonce'    => wp_create_nonce('photo_gallery_load_more_nonce') // Security nonce
-        )
-    );
+    // Enqueue Load More script
+    wp_enqueue_script('photo-load-more', get_template_directory_uri() . '/assets/js/load-more.js', array('jquery'), '1.0', true);
+
+    // Enqueue Lightbox script
+    wp_enqueue_script('lightbox-script', get_template_directory_uri() . '/assets/js/lightbox.js', [], filemtime(get_template_directory() . '/assets/js/lightbox.js'), true);
+
+    // Pass AJAX data to the Load More script
+    wp_localize_script('photo-load-more', 'galleryLoadMore', array(
+        'ajax_url' => admin_url('admin-ajax.php'), // AJAX URL
+        'nonce'    => wp_create_nonce('photo_load_more_nonce'), // Security nonce
+    ));
 }
-add_action('wp_enqueue_scripts', 'motaphoto_enqueue_styles');
+add_action('wp_enqueue_scripts', 'motaphoto_enqueue_assets');
+
 
 // Register Main Menu
 function motaphoto_register_menus() {
@@ -55,130 +62,49 @@ function get_random_photo_url() {
 
 
 
-/*function load_photos_api_endpoint() {
-    register_rest_route('photo/v1', '/gallery', [
-        'methods' => WP_REST_Server::READABLE,
-        'callback' => 'fetch_photos',
-        'args' => [
-            'page' => [
-                'default' => 1,
-                'validate_callback' => 'is_numeric',
-            ],
-            'category' => [
-                'validate_callback' => 'is_string',
-            ],
-            'format' => [
-                'validate_callback' => 'is_string',
-            ],
-            'order' => [
-                'default' => 'desc',
-                'validate_callback' => function ($param) {
-                    return in_array(strtolower($param), ['asc', 'desc']);
-                },
-            ],
-        ],
-        'permission_callback' => '__return_true',
-    ]);
-}
-add_action('rest_api_init', 'load_photos_api_endpoint');*/
 
+function photo_load_more() {
+    
+    if (
+        ! isset($_REQUEST['nonce']) || 
+        ! wp_verify_nonce($_REQUEST['nonce'], 'photo-load-more')
+    ) {
+        wp_send_json_error("Unauthorized request.", 403);
+    }
 
-/*function gallery_load_more_init() {
+    
+    if (! isset($_POST['paged'])) {
+        wp_send_json_error("Missing page number.", 400);
+    }
 
-    // Pass data to the JavaScript file
-    wp_localize_script(
-        'photo-gallery-load-more',
-        'galleryLoadMore',
-        array(
-            'ajax_url' => admin_url('admin-ajax.php'), // AJAX URL for WordPress
-            'nonce' => wp_create_nonce('photo_gallery_load_more_nonce') // Security nonce
-        )
-    );
-}
-add_action('wp_enqueue_scripts', 'gallery_load_more_init');
-
-
-// Ensure the file is accessed via WordPress only
-if (!defined('ABSPATH')) {
-    exit;
-}*/
-
-// Your existing code...
-
-// Add the AJAX handler for the Load More functionality
-function photo_gallery_load_more_handler() {
-    // Verify nonce for security
-    check_ajax_referer('photo_gallery_load_more_nonce', 'nonce');
-
-    // Get the page number from the AJAX request
-    $page = isset($_POST['page']) ? absint($_POST['page']) : 1;
-
-    // Query for photos
-    $args = array(
-        'post_type' => 'photo', 
-        'posts_per_page' => 8,  
-        'paged' => $page
-    );
+    $paged = intval($_POST['paged']);
+    $args = [
+        'post_type' => 'photo',
+        'posts_per_page' => 8,
+        'paged' => $paged,
+    ];
 
     $query = new WP_Query($args);
 
     if ($query->have_posts()) {
-        ob_start(); // Start output buffering
-
+        ob_start();
         while ($query->have_posts()) {
             $query->the_post();
-            ?>
-            <div class="gallery-item">
-                <a href="<?php the_permalink(); ?>">
-                    <?php the_post_thumbnail('medium'); // Display post thumbnail ?>
-                    <h3><?php the_title(); ?></h3>
-                </a>
-            </div>
-            <?php
+            get_template_part('template-parts/photo_block');
         }
-
         wp_reset_postdata();
-        echo ob_get_clean(); // Return the buffered content
+
+        $html = ob_get_clean();
+        wp_send_json_success($html);
     } else {
-        echo ''; // No more items
+        wp_send_json_error("No more photos found.", 404);
     }
-
-    wp_die(); // End AJAX response
 }
-add_action('wp_ajax_photo_gallery_load_more', 'photo_gallery_load_more_handler');
-add_action('wp_ajax_nopriv_photo_gallery_load_more', 'photo_gallery_load_more_handler');
-
-// Your other code...
+add_action('wp_ajax_photo-load-more', 'photo_load_more');
+add_action('wp_ajax_nopriv_photo-load-more', 'photo_load_more');
 
 
 
-
-
-function register_photo_post_type() {
-    // Register custom post type
-    register_post_type('photo', [
-        'label' => 'Photos',
-        'public' => true,
-        'supports' => ['title', 'editor', 'thumbnail'],
-    ]);
-
-    
-    add_action( 'init', 'my_custom_taxonomy' );
-    
-    // Register Category Taxonomy
-    register_taxonomy('category', 'photo', [
-        'labels' => [
-            'name' => 'Categories',
-            'singular_name' => 'Category',
-        ],
-        'hierarchical' => true,
-        'show_ui' => true,
-        'show_admin_column' => true,
-        'query_var' => true,
-        'rewrite' => ['slug' => 'category'],
-    ]);
-}
-add_action('init', 'register_photo_post_type');
 
 
 

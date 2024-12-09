@@ -17,7 +17,7 @@ get_header();
     <section class="filter-section">
         <div class="filter-left">
             <select id="categories-filter">
-                <option value="">CATEGORIES</option>
+                <option value="">CATÉGORIES</option>
                 <option value="">Réception</option>
                 <option value="">Concert</option>
                 <option value="">Mariage</option>
@@ -41,7 +41,6 @@ get_header();
                 ?>
             </select>
         </div>
-
         <div class="filter-right">
             <select id="year-filter">
                 <option value="">TRIER PAR</option>
@@ -77,7 +76,16 @@ get_header();
         <!-- Dynamic images will be appended here -->
     </section>
 
-    <button id="load-more" class="load-more" data-page="1">Charge Plus</button>
+    
+    <button
+	class="load-more"
+    data-page="1"
+    data-postid="<?php echo get_the_ID(); ?>"
+    data-nonce="<?php echo wp_create_nonce('photo-load-more'); ?>"
+    data-action="photo-load-more"
+    data-ajaxurl="<?php echo admin_url( 'admin-ajax.php' ); ?>"
+    >Charge Plus</button>
+  
 </main>
 
 <?php get_footer(); ?>

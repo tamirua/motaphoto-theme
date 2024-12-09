@@ -16,6 +16,13 @@
             </a>
         </div>
 
+        <!-- Mobile Menu Toggle -->
+        <div id="menu-toggle" class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
         <!-- Navigation Menu -->
         <nav class="main-menu">
             <?php
@@ -30,10 +37,4 @@
     
 </header>
 
-<!-- Contact Link (will trigger modal) -->
-<!--<a href="#" class="contact-nav-link">Contact</a>-->
-<!--<a href="javascript:void(0);" onclick="openModal()">Contact</a>-->
-
-
-
-<main> <!-- Main content starts here -->
+<main> 
