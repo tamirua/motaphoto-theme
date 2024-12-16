@@ -1,5 +1,4 @@
-
-
+//load more button 
 jQuery(document).ready(function ($) {
     $('.load-more').on('click', function () {
         const button = $(this);
