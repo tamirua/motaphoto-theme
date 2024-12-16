@@ -19,12 +19,20 @@ get_header();
         <div class="custom-dropdown" id="categories-dropdown">
             <div class="dropdown-selected" data-placeholder="CATÉGORIES">CATÉGORIES</div>
             <div class="dropdown-options">
-                <?php
-                $categories = get_terms(['taxonomy' => 'category', 'hide_empty' => true]);
-                foreach ($categories as $category) {
-                    echo "<div class='dropdown-option' data-value='{$category->slug}'>{$category->name}</div>";
-                }
-                ?>
+            <?php
+        // Exclude the "Uncategorized" category
+        $categories = get_terms([
+            'taxonomy'   => 'photo-category', // Use your custom taxonomy slug
+            'hide_empty' => true, // Exclude empty categories
+            'exclude'    => get_option('default_category'), // Exclude the default "Uncategorized" category
+        ]);
+
+        if (!empty($categories) && !is_wp_error($categories)) {
+            foreach ($categories as $category) {
+                echo "<div class='dropdown-option' data-value='{$category->slug}'>{$category->name}</div>";
+            }
+        }
+        ?>
             </div>
         </div>
         
