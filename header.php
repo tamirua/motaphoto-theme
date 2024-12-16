@@ -15,15 +15,13 @@
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" alt="<?php bloginfo('name'); ?>">
             </a>
         </div>
-
-        <!-- Mobile Menu Toggle -->
+        
         <div id="menu-toggle" class="menu-toggle">
             <span></span>
             <span></span>
             <span></span>
         </div>
 
-        <!-- Navigation Menu -->
         <nav class="main-menu">
             <?php
             wp_nav_menu(array(

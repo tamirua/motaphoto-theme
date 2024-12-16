@@ -15,45 +15,51 @@ get_header();
 
     <!-- Filters Section -->
     <section class="filter-section">
-        <div class="filter-left">
-            <select id="categories-filter">
-                <option value="">CATÉGORIES</option>
-                <option value="">Réception</option>
-                <option value="">Concert</option>
-                <option value="">Mariage</option>
-                <option value="">Télévision</option>
+    <div class="filter-left">
+        <div class="custom-dropdown" id="categories-dropdown">
+            <div class="dropdown-selected" data-placeholder="CATÉGORIES">CATÉGORIES</div>
+            <div class="dropdown-options">
                 <?php
                 $categories = get_terms(['taxonomy' => 'category', 'hide_empty' => true]);
                 foreach ($categories as $category) {
-                    echo "<option value='{$category->slug}'>{$category->name}</option>";
+                    echo "<div class='dropdown-option' data-value='{$category->slug}'>{$category->name}</div>";
                 }
                 ?>
-            </select>
-            <select id="formats-filter">
-                <option value="">FORMATS</option>
-                <option value="">Paysage</option>
-                <option value="">Portrait</option>
-                <?php
-                $formats = get_terms(['taxonomy' => 'format', 'hide_empty' => true]);
-                foreach ($formats as $format) {
-                    echo "<option value='{$format->slug}'>{$format->name}</option>";
-                }
-                ?>
-            </select>
+            </div>
         </div>
-        <div class="filter-right">
-            <select id="year-filter">
-                <option value="">TRIER PAR</option>
+        
+        <div class="custom-dropdown" id="formats-dropdown">
+            <div class="dropdown-selected" data-placeholder="FORMATS">FORMATS</div>
+            <div class="dropdown-options">
+                <?php
+                $formats = get_terms(['taxonomy' => 'photo-format', 'hide_empty' => true]);
+                foreach ($formats as $format) {
+                    echo "<div class='dropdown-option' data-value='{$format->slug}'>{$format->name}</div>";
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    
+    <div class="filter-right">
+        <div class="custom-dropdown" id="year-dropdown">
+            <div class="dropdown-selected" data-placeholder="TRIER PAR">TRIER PAR</div>
+            <div class="dropdown-options">
                 <?php
                 global $wpdb;
                 $years = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'Année'");
                 foreach ($years as $year) {
-                    echo "<option value='{$year}'>{$year}</option>";
+                    echo "<div class='dropdown-option' data-value='{$year}'>{$year}</div>";
                 }
                 ?>
-            </select>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
+
+    
+
+
 
 
     <!-- Photo Gallery Section -->
@@ -73,10 +79,8 @@ get_header();
             wp_reset_postdata();
         endif;
         ?>
-        <!-- Dynamic images will be appended here -->
+     
     </section>
-
-    
     <button
 	class="load-more"
     data-page="1"
@@ -85,7 +89,6 @@ get_header();
     data-action="photo-load-more"
     data-ajaxurl="<?php echo admin_url( 'admin-ajax.php' ); ?>"
     >Charge Plus</button>
-  
 </main>
 
 <?php get_footer(); ?>

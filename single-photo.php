@@ -5,7 +5,7 @@
 */
 
 get_header(); 
-
+//Je déclare pour le bouton de contact pour insérer les données de référence
 if (have_posts()) :
     while (have_posts()) :
         the_post(); 
@@ -18,14 +18,14 @@ if (have_posts()) :
                     <h2><?php
                         $title = get_the_title();
                         
-                        // Split title into two parts at the first space
-                        $title_parts = explode(' ', $title, 2);  // Split only into two parts
+                        // Divisez le titre en deux parties au premier espace
+                        $title_parts = explode(' ', $title, 2);  
                         
-                        // If there are two parts, display them on separate lines
+                        
                         if (count($title_parts) == 2) {
                             echo esc_html($title_parts[0]) . '<br>' . esc_html($title_parts[1]);
                         } else {
-                            echo esc_html($title); // For titles that don't have a space, just display the whole title
+                            echo esc_html($title); 
                         }
                         ?></h2>
                     <p><span>Référence&ensp;:</span> <?php echo esc_html(get_post_meta(get_the_ID(), 'reference', true)); ?></p>
@@ -40,8 +40,8 @@ if (have_posts()) :
                             }
                         }
                         ?>
-                    <p><span>Type&ensp;:</span> <?php echo get_post_meta(get_the_ID(), 'type', true); ?></p>
-                    <p><span>Année&ensp;:</span> <?php echo get_the_date( 'Y' );  ?></p>
+                    <p><span>Type:&ensp;</span> <?php echo get_post_meta(get_the_ID(), 'type', true); ?></p>
+                    <p><span>Année:&ensp;</span> <?php echo get_the_date( 'Y' );  ?></p>
                     <hr>
                 </div>
                 <div class="photo-thumbnail">
@@ -57,15 +57,36 @@ if (have_posts()) :
                     <div class="photo-content">
                         <p>Cette photo vous intéresse ?</p>
                     </div>
-                    <button id="contact-button" data-photo-ref="<?php echo esc_attr($photo_reference); ?>">
+                    <button class="contact-button" data-photo-ref="<?php echo esc_attr($photo_reference); ?>">
                         Contact
                     </button>
                 </div>
-                <div class="photo-bottom">
-                    
-                
 
+            <?php
+            $prev_post = get_previous_post();
+            $next_post = get_next_post();
+
+            $prev_thumbnailurl = $prev_post ? get_the_post_thumbnail_url($prev_post->ID, 'thumbnail') : get_template_directory_uri() . '/assets/images/default-thumbnail.png';
+            $next_thumbnailurl = $next_post ? get_the_post_thumbnail_url($next_post->ID, 'thumbnail') : get_template_directory_uri() . '/assets/images/default-thumbnail.png';
+            ?>
+            <div class="photo-navigation">
+                <div class="photo-arrows">
+                    <?php if ($prev_post): ?>
+                        <a href="<?php echo esc_url(get_permalink($prev_post->ID)); ?>" class="arrow-left">
+                            <img src="<?php echo esc_url($prev_thumbnailurl); ?>" alt="Thumbnail for <?php echo esc_attr(get_the_title($prev_post->ID)); ?>" class="photo-card-image-left" loading="lazy">
+                            <img src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/arrow-prev.png" alt="Previous" class="arrow-icon">
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ($next_post): ?>
+                        <a href="<?php echo esc_url(get_permalink($next_post->ID)); ?>" class="arrow-right">
+                            <img src="<?php echo esc_url($next_thumbnailurl); ?>" alt="Thumbnail for <?php echo esc_attr(get_the_title($next_post->ID)); ?>" class="photo-card-image-right" loading="lazy">
+                            <img src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/arrow-next.png" alt="Next" class="arrow-icon">
+                        </a>
+                    <?php endif; ?>
                 </div>
+            </div>
+
             </article>
             <div class="modal-container">
                 <?php get_template_part('templates_parts/contact-modal'); // Include the contact modal ?>

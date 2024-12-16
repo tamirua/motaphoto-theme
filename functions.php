@@ -1,22 +1,21 @@
 <?php
 function motaphoto_enqueue_assets() {
-    // Enqueue main stylesheet
-    wp_enqueue_style('motaphoto-style', get_template_directory_uri() . '/style.css');
+    wp_enqueue_style('motaphoto-style', get_template_directory_uri() . '/style.css', [], filemtime(get_template_directory() . '/style.css'));
 
-    // Enqueue general scripts
-    wp_enqueue_script('mota-photo-scripts', get_template_directory_uri() . '/assets/js/scripts.js', array('jquery'), null, true);
+    wp_enqueue_script('mota-photo-scripts', get_template_directory_uri() . '/assets/js/scripts.js', ['jquery'], filemtime(get_template_directory() . '/assets/js/scripts.js'), true);
 
-    // Enqueue Load More script
-    wp_enqueue_script('photo-load-more', get_template_directory_uri() . '/assets/js/load-more.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('photo-load-more', get_template_directory_uri() . '/assets/js/load-more.js', ['jquery'], filemtime(get_template_directory() . '/assets/js/load-more.js'), true);
 
-    // Enqueue Lightbox script
+    wp_enqueue_script('filter-photos', get_template_directory_uri() . '/assets/js/filter-photos.js', ['jquery'], filemtime(get_template_directory() . '/assets/js/filter-photos.js'), true);
+    wp_localize_script('filter-photos', 'ajaxurl', admin_url('admin-ajax.php'));
+
     wp_enqueue_script('lightbox-script', get_template_directory_uri() . '/assets/js/lightbox.js', [], filemtime(get_template_directory() . '/assets/js/lightbox.js'), true);
 
-    // Pass AJAX data to the Load More script
     wp_localize_script('photo-load-more', 'galleryLoadMore', array(
-        'ajax_url' => admin_url('admin-ajax.php'), // AJAX URL
-        'nonce'    => wp_create_nonce('photo_load_more_nonce'), // Security nonce
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('photo_load_more_nonce'),
     ));
+    
 }
 add_action('wp_enqueue_scripts', 'motaphoto_enqueue_assets');
 
@@ -40,7 +39,7 @@ function custom_template_hierarchy($template) {
 }
 add_filter('single_template', 'custom_template_hierarchy');
 
-//upload background photo on hero section
+//Télécharger la photo d’arrière-plan dans la section Héros
 function get_random_photo_url() {
     $photo_query = new WP_Query([
         'post_type' => 'photo',
@@ -60,9 +59,7 @@ function get_random_photo_url() {
     return $url;
 }
 
-
-
-
+//load more button 
 function photo_load_more() {
     
     if (
@@ -102,6 +99,72 @@ function photo_load_more() {
 }
 add_action('wp_ajax_photo-load-more', 'photo_load_more');
 add_action('wp_ajax_nopriv_photo-load-more', 'photo_load_more');
+
+
+/*filter-photos-ajax*/
+function filter_photos_ajax() {
+    $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
+    $format = isset($_POST['format']) ? sanitize_text_field($_POST['format']) : '';
+    $year = isset($_POST['year']) ? sanitize_text_field($_POST['year']) : '';
+
+    $args = [
+        'post_type' => 'photo',
+        'posts_per_page' => 8,
+    ];
+
+    
+    $tax_query = [];
+    if ($category) {
+        $tax_query[] = [
+            'taxonomy' => 'photo-category',
+            'field'    => 'slug',
+            'terms'    => $category,    
+            
+        ];
+
+    }
+    if ($format) {
+        $tax_query[] = [
+            'taxonomy' => 'photo-format',
+            'field'    => 'slug',
+            'terms'    => $format,
+        ];
+    }
+
+    if (!empty($tax_query)) {
+        $args['tax_query'] = $tax_query;
+    }
+
+    
+    if ($year) {
+        $args['meta_query'] = [
+            [
+                'key'     => 'Année',
+                'value'   => $year,
+                'compare' => '=',
+            ],
+        ];
+    }
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) {
+        ob_start();
+        while ($query->have_posts()) {
+            $query->the_post();
+            get_template_part('template-parts/photo_block'); 
+        }
+        wp_reset_postdata();
+
+        wp_send_json_success(ob_get_clean());
+    } else {
+        wp_send_json_error('No photos found');
+    }
+}
+add_action('wp_ajax_filter_photos', 'filter_photos_ajax');
+add_action('wp_ajax_nopriv_filter_photos', 'filter_photos_ajax');
+
+
 
 
 
