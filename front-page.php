@@ -22,9 +22,9 @@ get_header();
             <?php
         // Exclude the "Uncategorized" category
         $categories = get_terms([
-            'taxonomy'   => 'photo-category', // Use your custom taxonomy slug
-            'hide_empty' => true, // Exclude empty categories
-            'exclude'    => get_option('default_category'), // Exclude the default "Uncategorized" category
+            'taxonomy'   => 'photo-category', 
+            'hide_empty' => true, 
+            'exclude'    => get_option('default_category'), 
         ]);
 
         if (!empty($categories) && !is_wp_error($categories)) {
