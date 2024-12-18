@@ -55,7 +55,7 @@ get_header();
             <div class="dropdown-options">
                 <?php
                 global $wpdb;
-                $years = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'Année'");
+                $years = $wpdb->get_col("SELECT DISTINCT YEAR(post_date) FROM $wpdb->posts WHERE post_type = 'photo' AND post_status = 'publish' ORDER BY YEAR(post_date) DESC");
                 foreach ($years as $year) {
                     echo "<div class='dropdown-option' data-value='{$year}'>{$year}</div>";
                 }
@@ -64,9 +64,6 @@ get_header();
         </div>
     </div>
 </section>
-
-    
-
 
 
 
@@ -90,13 +87,15 @@ get_header();
      
     </section>
     <button
-	class="load-more"
-    data-page="1"
+    class="load-more"
+    data-page="1" 
     data-postid="<?php echo get_the_ID(); ?>"
     data-nonce="<?php echo wp_create_nonce('photo-load-more'); ?>"
     data-action="photo-load-more"
-    data-ajaxurl="<?php echo admin_url( 'admin-ajax.php' ); ?>"
-    >Charge Plus</button>
+    data-ajaxurl="<?php echo admin_url('admin-ajax.php'); ?>"
+    data-max-pages="<?php echo $query->max_num_pages; ?>" 
+>Charge Plus</button>
+
 </main>
 
 <?php get_footer(); ?>

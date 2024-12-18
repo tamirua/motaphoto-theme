@@ -121,13 +121,25 @@ document.addEventListener("DOMContentLoaded", function () {
   
     
     document.addEventListener('click', function (event) {
-      if (!event.target.closest('.custom-dropdown')) {
-        dropdowns.forEach(function (dropdown) {
-          dropdown.classList.remove('open');
-        });
-      }
+        if (!event.target.closest('.custom-dropdown')) {
+            dropdown.classList.remove('open');
+            if (!dropdown.querySelector('.dropdown-option.selected')) {
+                selected.textContent = placeholder; // Reset to placeholder
+            }
+        }
     });
   });
+
+
+ 
+
+
+
+
+
+
+
+
   
 
 
@@ -158,70 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    /****for filter** */
-
-   /* document.addEventListener("change", function (e) {
-        if (e.target.matches("#category-filter, #year-filter")) {
-            const category = document.getElementById("category-filter").value;
-            const year = document.getElementById("year-filter").value;
-
-            fetch(`${galleryLoadMore.ajax_url}?action=filter_photos&category=${category}&year=${year}`)
-                .then(response => response.text())
-                .then(data => {
-                    document.querySelector(".photo-grid").innerHTML = data;
-                });
-        }
-    });
-
-    //for filter
-
-
-    function fetchPhotos(page = 1) {
-        const filters = {
-            category: $('#categories-filter').val(),
-            format: $('#formats-filter').val(),
-            order: $('#year-filter').val(),
-        };
-
-        $.ajax({
-            url: my_ajax_object.ajax_url,
-            type: 'POST',
-            data: {
-                action: 'fetch_photos',
-                filters,
-                page,
-            },
-            beforeSend: function () {
-                $('#load-more').text('Loading...');
-            },
-            success: function (response) {
-                if (page === 1) {
-                    $('#photo-gallery').html(response);
-                } else {
-                    $('#photo-gallery').append(response);
-                }
-                $('#load-more').text('Charger Plus').data('page', page);
-            },
-        });
-    }
-
-    // Trigger on filter change
-    $('#categories-filter, #formats-filter, #year-filter').change(function () {
-        fetchPhotos(1);
-    });
-
-    // Load more button
-    $('#load-more').click(function () {
-        const nextPage = $(this).data('page') + 1;
-        fetchPhotos(nextPage);
-    });
-    console.log(galleryLoadMore.ajax_url); */// Should display the admin-ajax.php URL
-
-/* i have to insert the close of jquqry*/
-
-
-
-
+    
 
   
     

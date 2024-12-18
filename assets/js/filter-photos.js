@@ -31,7 +31,6 @@ jQuery(document).ready(function ($) {
         const dropdown = $(this).closest('.custom-dropdown');
         const selectedText = $(this).text();
         const selectedValue = $(this).data('value');
-
         
         dropdown.find('.dropdown-selected').text(selectedText).data('value', selectedValue);
 
@@ -39,7 +38,6 @@ jQuery(document).ready(function ($) {
         fetchFilteredPhotos();
     });
 });
-
 
 
 
