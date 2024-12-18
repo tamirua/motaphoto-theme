@@ -1,5 +1,4 @@
 
-
 <?php
 function motaphoto_enqueue_assets() {
     wp_enqueue_style('motaphoto-style', get_template_directory_uri() . '/style.css', [], filemtime(get_template_directory() . '/style.css'));
@@ -63,48 +62,7 @@ function get_random_photo_url() {
     return $url;
 }
 
-//load more button 
-/*function photo_load_more() {
-    
-    if (
-        ! isset($_REQUEST['nonce']) || 
-        ! wp_verify_nonce($_REQUEST['nonce'], 'photo-load-more')
-    ) {
-        wp_send_json_error("Unauthorized request.", 403);
-    }
 
-    
-    if (! isset($_POST['paged'])) {
-        wp_send_json_error("Missing page number.", 400);
-    }
-
-    $paged = intval($_POST['paged']);
-    $args = [
-        'post_type' => 'photo',
-        'posts_per_page' => 8,
-        'paged' => $paged,
-    ];
-
-    $query = new WP_Query($args);
-
-    if ($query->have_posts()) {
-        ob_start();
-        while ($query->have_posts()) {
-            $query->the_post();
-            get_template_part('template-parts/photo_block');
-        }
-        wp_reset_postdata();
-
-        $html = ob_get_clean();
-        wp_send_json_success($html);
-    } else {
-        wp_send_json_error("No more photos found.", 404);
-    }
-}
-add_action('wp_ajax_photo-load-more', 'photo_load_more');
-add_action('wp_ajax_nopriv_photo-load-more', 'photo_load_more');*/
-
-//test
 
 function photo_load_more() {
     // Vérifier la sécurité du nonce
